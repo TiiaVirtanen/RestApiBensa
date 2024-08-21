@@ -1,0 +1,6 @@
+@RestApiBensas_HostAddress = http://localhost:5105
+
+GET {{RestApiBensas_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
