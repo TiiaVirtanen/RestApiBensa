@@ -44,6 +44,21 @@ namespace RestApiBensas.Controllers
             }
         }
 
+        [HttpGet("ajoneuvo/{id}")]
+        public async Task<IActionResult> GetTankkauksetByAjoneuvo(int id)
+        {
+            var tankkaukset = await _dbcontext.Tankkaus
+                .Where(t => t.AjoneuvoId == id)
+                .ToListAsync();
+
+            if (tankkaukset == null || !tankkaukset.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(tankkaukset);
+        }
+
         [HttpPost]
         public async Task<ActionResult> AddNew(Tankkau tank)
         {
