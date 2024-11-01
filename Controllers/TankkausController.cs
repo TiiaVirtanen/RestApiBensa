@@ -44,10 +44,25 @@ namespace RestApiBensas.Controllers
             }
         }
 
-        [HttpGet("yhteenveto/{ajoneuvoId}")]
-        public IActionResult GetTankkausYhteenveto(int ajoneuvoId)
+        [HttpGet("ajoneuvo/{id}")]
+        public async Task<IActionResult> GetTankkauksetByAjoneuvo(int id)
         {
-            var yhteenveto = _dbcontext.Tankkaus
+            var tankkaukset = await _dbcontext.Tankkaus
+                .Where(t => t.AjoneuvoId == id)
+                .ToListAsync();
+
+            if (tankkaukset == null || !tankkaukset.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(tankkaukset);
+        }
+
+        [HttpGet("yhteenveto/{ajoneuvoId}")]
+        public async Task<IActionResult> GetTankkausYhteenveto(int ajoneuvoId)
+        {
+            var yhteenveto = await _dbcontext.Tankkaus
                 .Where(t => t.AjoneuvoId == ajoneuvoId)
                 .GroupBy(t => t.AjoneuvoId)
                 .Select(k => new
@@ -57,7 +72,7 @@ namespace RestApiBensas.Controllers
                     Kokonaiskulutus = k.Sum(t => t.Litraa),
                     KäytettyEuromäärä = k.Sum(t => t.Euroa)
                 })
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (yhteenveto == null)
             {
@@ -67,8 +82,6 @@ namespace RestApiBensas.Controllers
             return Ok(yhteenveto);
         }
 
-
-
         [HttpPost]
         public async Task<ActionResult> AddNew(Tankkau tank)
         {
@@ -76,7 +89,7 @@ namespace RestApiBensas.Controllers
             {
                 _dbcontext.Tankkaus.Add(tank);
                 await _dbcontext.SaveChangesAsync();
-                return await GetUpdate5LatestAsync();
+                return Ok();
             }
             catch (Exception e)
             {

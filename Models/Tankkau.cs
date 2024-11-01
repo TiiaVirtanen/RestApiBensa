@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RestApiBensas.Models;
 
@@ -17,5 +18,5 @@ public partial class Tankkau
 
     public DateOnly? Päivämäärä { get; set; }
 
-    public virtual Ajoneuvot Ajoneuvo { get; set; } = null!;
+    public virtual Ajoneuvot? Ajoneuvo { get; set; }
 }
