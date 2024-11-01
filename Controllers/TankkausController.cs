@@ -51,11 +51,6 @@ namespace RestApiBensas.Controllers
                 .Where(t => t.AjoneuvoId == id)
                 .ToListAsync();
 
-            if (tankkaukset == null || !tankkaukset.Any())
-            {
-                return NotFound();
-            }
-
             return Ok(tankkaukset);
         }
 
