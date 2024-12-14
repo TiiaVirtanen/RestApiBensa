@@ -69,11 +69,6 @@ namespace RestApiBensas.Controllers
                 })
                 .FirstOrDefaultAsync();
 
-            if (yhteenveto == null)
-            {
-                return NotFound();
-            }
-
             return Ok(yhteenveto);
         }
 
